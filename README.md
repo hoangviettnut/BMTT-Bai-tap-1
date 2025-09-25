@@ -28,7 +28,7 @@ Phân tích N-gram:
 - Phân tích tần số của các cặp chữ cái (bigram) hoặc bộ ba (trigram) trong các văn bản được giải mã để phù hợp với các mẫu phổ biến trong tiếng Anh.
 Khả năng đọc:
 - Sử dụng phương pháp phỏng đoán đơn giản để chấm điểm kết quả đầu ra dựa trên các yếu tố như độ dài từ trung bình, sự hiện diện của các từ thông dụng và tính mạch lạc tổng thể.
-### e) Cài đặt thuật toán bằng C++ và JS HTML + CSS
+### e) Cài đặt thuật toán bằng C++ và JS, HTML + CSS
 C++: <img width="1483" height="762" alt="image" src="https://github.com/user-attachments/assets/85c9b02b-1157-4338-80bf-2a15590138ff" />
 JS với giao diện HTML + CSS với chuỗi: "luong hoang viet":
 Mã hóa: <img width="1920" height="1140" alt="image" src="https://github.com/user-attachments/assets/3185f2eb-48a8-4b95-b883-378e501e079d" />
@@ -44,7 +44,33 @@ Công thức mã hóa của hệ mật này là : y = (a*x + b) mod 26
 
 Để giải mã được hệ mật này, trước hết ta cần tìm giá trị a^-1 thỏa mãn điều kiện a*a^-1 mod 26 = 1. Sau đó áp dụng công thức giải mã hệ mật là: x = a^-1*(y - b) mod 26
 
-Giải mã:
+Giải mã: Công thức của hàm giải mã là: x = a^-1*(y - b) mod 26
+### c) Không gian khóa: Là tập hợp tất cả các cặp khóa (a, b) có thể sử dụng trong mật mã Affine, nơi a là một số nguyên được chọn sao cho có ước chung lớn nhất (ƯCLN) là 1 với kích thước bảng chữ cái, và b là một số nguyên bất kỳ được chọn trong khoảng từ 0 đến kích thước bảng chữ cái trừ 1. Số lượng các khóa hợp lệ xác định kích thước của không gian khóa, và điều này ảnh hưởng đến độ bảo mật của mật mã. 
+### d) Cách phá mã ( mà không cần khóa):
+Phân tích tần suất (Frequency Analysis)
+- Ý tưởng: Trong tiếng Việt hoặc tiếng Anh, một số chữ cái xuất hiện thường xuyên hơn (ví dụ: E, T, A trong tiếng Anh).
+Tấn công vét cạn (Brute-force Attack)
+- Không gian khóa: Với bảng chữ cái 26 ký tự, chỉ có 12 giá trị hợp lệ cho a (sao cho \gcd(a, 26) = 1) và 26 giá trị cho b, tổng cộng 312 cặp khóa.
+- Thực hiện:
+- Thử tất cả các cặp khóa (a, b).
+- Giải mã bản mã với từng cặp và kiểm tra xem bản rõ có hợp lý không (dựa vào từ điển hoặc cấu trúc ngôn ngữ).
+Giải hệ phương trình tuyến tính
+- Nếu có ít nhất hai cặp ký tự bản rõ và bản mã tương ứng, có thể thiết lập hệ phương trình:
+\begin{cases}
+
+
+y_1 = a x_1 + b \mod 26 \\
+
+
+y_2 = a x_2 + b \mod 26
+
+
+\end{cases}
+- Giải hệ để tìm a và b.
+### e) Cài đặt thuật toán bằng C++ và JS, HTML + CSS
+
+
+
 
 
 
