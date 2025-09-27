@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thuật toán Caesar Cipher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    #output {
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #34495e;
+    }
+  </style>
+</head>
+<body>
+  <h1>Caesar Cipher - Mã hóa dịch chuyển</h1>
+
+  <label for="text">Nhập văn bản:</label>
+  <textarea id="text" rows="4"></textarea>
+
+  <label for="shift">Số bước dịch chuyển:</label>
+  <input type="number" id="shift" value="3" min="1" max="25">
+
+  <button onclick="encrypt()">Mã hóa</button>
+  <button onclick="decrypt()">Giải mã</button>
+
+  <div id="output"></div>
+
+  <script>
+    function caesar(str, shift, decrypt = false) {
+      if (decrypt) shift = (26 - shift) % 26;
+      return str.split('').map(char => {
+        const code = char.charCodeAt(0);
+        // Chữ thường a-z
+        if (code >= 97 && code <= 122) {
+          return String.fromCharCode((code - 97 + shift) % 26 + 97);
+        }
+        // Chữ hoa A-Z
+        else if (code >= 65 && code <= 90) {
+          return String.fromCharCode((code - 65 + shift) % 26 + 65);
+        }
+        // Các ký tự khác giữ nguyên
+        else {
+          return char;
+        }
+      }).join('');
+    }
+
+    function encrypt() {
+      const text = document.getElementById('text').value;
+      const shift = parseInt(document.getElementById('shift').value);
+      if (!text || isNaN(shift)) {
+        document.getElementById('output').innerText = 'Vui lòng nhập văn bản và số bước dịch chuyển hợp lệ!';
+        return;
+      }
+      const result = caesar(text, shift);
+      document.getElementById('output').innerText = 'Kết quả mã hóa: ' + result;
+    }
+
+    function decrypt() {
+      const text = document.getElementById('text').value;
+      const shift = parseInt(document.getElementById('shift').value);
+      if (!text || isNaN(shift)) {
+        document.getElementById('output').innerText = 'Vui lòng nhập văn bản và số bước dịch chuyển hợp lệ!';
+        return;
+      }
+      const result = caesar(text, shift, true);
+      document.getElementById('output').innerText = 'Kết quả giải mã: ' + result;
+    }
+  </script>
+</body>
+</html>

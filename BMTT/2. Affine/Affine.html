@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Affine Cipher Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    input, button {
+      margin: 10px 0;
+      padding: 8px;
+      font-size: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔐 Thuật toán Affine Cipher</h2>
+  <label>Văn bản:</label><br>
+  <input type="text" id="text"><br>
+  <label>Khóa a:</label><br>
+  <input type="number" id="a" value="5"><br>
+  <label>Khóa b:</label><br>
+  <input type="number" id="b" value="8"><br>
+  <button onclick="encrypt()">Mã hóa</button>
+  <button onclick="decrypt()">Giải mã</button>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    const m = 26;
+
+    function modInverse(a, m) {
+      for (let i = 0; i < m; i++) {
+        if ((a * i) % m === 1) return i;
+      }
+      return null;
+    }
+
+    function encrypt() {
+      const text = document.getElementById("text").value.toUpperCase();
+      const a = parseInt(document.getElementById("a").value);
+      const b = parseInt(document.getElementById("b").value);
+      let result = "";
+
+      for (let char of text) {
+        if (char >= 'A' && char <= 'Z') {
+          let x = char.charCodeAt(0) - 65;
+          let y = (a * x + b) % m;
+          result += String.fromCharCode(y + 65);
+        } else {
+          result += char;
+        }
+      }
+      document.getElementById("output").value = result;
+    }
+
+    function decrypt() {
+      const text = document.getElementById("text").value.toUpperCase();
+      const a = parseInt(document.getElementById("a").value);
+      const b = parseInt(document.getElementById("b").value);
+      const a_inv = modInverse(a, m);
+      if (a_inv === null) {
+        alert("Không thể giải mã vì a không có nghịch đảo modulo.");
+        return;
+      }
+
+      let result = "";
+      for (let char of text) {
+        if (char >= 'A' && char <= 'Z') {
+          let y = char.charCodeAt(0) - 65;
+          let x = (a_inv * (y - b + m)) % m;
+          result += String.fromCharCode(x + 65);
+        } else {
+          result += char;
+        }
+      }
+      document.getElementById("output").value = result;
+    }
+  </script>
+</body>
+</html>

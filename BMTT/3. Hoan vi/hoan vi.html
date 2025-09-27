@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Ma hoa hoan vi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .output {
+      margin-top: 20px;
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Ma hoa va giai ma hoan vi</h2>
+
+    <label for="inputText">Nhap chuoi:</label>
+    <input type="text" id="inputText" placeholder="Vi du: Luong Viet">
+
+    <label for="keyInput">Nhap khoa hoan vi (tu dong neu de trong):</label>
+    <input type="text" id="keyInput" placeholder="Vi du: 2 0 4 1 3">
+
+    <div class="buttons">
+      <button onclick="generateKey()">Sinh khoa ngau nhien</button>
+      <button onclick="encrypt()">Ma hoa</button>
+      <button onclick="decrypt()">Giai ma</button>
+    </div>
+
+    <div class="output">
+      <p><strong>Ban ma:</strong> <span id="encryptedText"></span></p>
+      <p><strong>Ban goc:</strong> <span id="decryptedText"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function parseKey(keyStr, length) {
+      if (!keyStr.trim()) return generateRandomKey(length);
+      const key = keyStr.trim().split(/\s+/).map(Number);
+      if (key.length !== length || new Set(key).size !== length || key.some(k => k < 0 || k >= length)) {
+        alert("Khoa khong hop le. Vui long nhap day so tu 0 den " + (length - 1));
+        return null;
+      }
+      return key;
+    }
+
+    function generateRandomKey(length) {
+      const arr = Array.from({ length }, (_, i) => i);
+      for (let i = length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      document.getElementById("keyInput").value = arr.join(" ");
+      return arr;
+    }
+
+    function generateKey() {
+      const text = document.getElementById("inputText").value;
+      if (!text) {
+        alert("Vui long nhap chuoi truoc khi sinh khoa.");
+        return;
+      }
+      generateRandomKey(text.length);
+    }
+
+    function encrypt() {
+      const text = document.getElementById("inputText").value;
+      const keyStr = document.getElementById("keyInput").value;
+      const key = parseKey(keyStr, text.length);
+      if (!key) return;
+
+      let result = "";
+      for (let i = 0; i < key.length; i++) {
+        result += text[key[i]];
+      }
+      document.getElementById("encryptedText").textContent = result;
+    }
+
+    function decrypt() {
+      const encrypted = document.getElementById("encryptedText").textContent;
+      const keyStr = document.getElementById("keyInput").value;
+      const key = parseKey(keyStr, encrypted.length);
+      if (!key) return;
+
+      let result = Array(encrypted.length);
+      for (let i = 0; i < key.length; i++) {
+        result[key[i]] = encrypted[i];
+      }
+      document.getElementById("decryptedText").textContent = result.join("");
+    }
+  </script>
+</body>
+</html>

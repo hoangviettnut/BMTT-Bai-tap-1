@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Ma hoa Vigenere</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .output {
+      margin-top: 20px;
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .output p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Ma hoa va giai ma Vigenere</h2>
+
+    <label for="inputText">Nhap chuoi ban ro:</label>
+    <textarea id="inputText" rows="3" placeholder="Vi du: Luong Viet 2025!"></textarea>
+
+    <label for="keyInput">Nhap khoa Vigenere:</label>
+    <input type="text" id="keyInput" placeholder="Vi du: KEY">
+
+    <div class="buttons">
+      <button onclick="encrypt()">Ma hoa</button>
+      <button onclick="decrypt()">Giai ma</button>
+    </div>
+
+    <div class="output">
+      <p><strong>Ban ma:</strong> <span id="encryptedText"></span></p>
+      <p><strong>Giai ma:</strong> <span id="decryptedText"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function normalize(text) {
+      return text.toUpperCase().replace(/[^A-Z]/g, "");
+    }
+
+    function repeatKey(text, key) {
+      let result = "";
+      let j = 0;
+      for (let i = 0; i < text.length; i++) {
+        if (/[A-Za-z]/.test(text[i])) {
+          result += key[j % key.length].toUpperCase();
+          j++;
+        } else {
+          result += " ";
+        }
+      }
+      return result;
+    }
+
+    function encrypt() {
+      const plain = document.getElementById("inputText").value;
+      const key = document.getElementById("keyInput").value;
+      if (!plain || !key) return alert("Vui long nhap chuoi va khoa.");
+
+      const fullKey = repeatKey(plain, key);
+      let result = "";
+
+      for (let i = 0; i < plain.length; i++) {
+        const c = plain[i];
+        const k = fullKey[i];
+        if (/[A-Za-z]/.test(c)) {
+          const base = c === c.toUpperCase() ? 65 : 97;
+          const shift = (c.toUpperCase().charCodeAt(0) - 65 + (k.charCodeAt(0) - 65)) % 26;
+          result += String.fromCharCode(shift + base);
+        } else {
+          result += c;
+        }
+      }
+
+      document.getElementById("encryptedText").textContent = result;
+    }
+
+    function decrypt() {
+      const cipher = document.getElementById("encryptedText").textContent;
+      const key = document.getElementById("keyInput").value;
+      if (!cipher || !key) return alert("Vui long ma hoa truoc khi giai ma.");
+
+      const fullKey = repeatKey(cipher, key);
+      let result = "";
+
+      for (let i = 0; i < cipher.length; i++) {
+        const c = cipher[i];
+        const k = fullKey[i];
+        if (/[A-Za-z]/.test(c)) {
+          const base = c === c.toUpperCase() ? 65 : 97;
+          const shift = (c.toUpperCase().charCodeAt(0) - 65 - (k.charCodeAt(0) - 65) + 26) % 26;
+          result += String.fromCharCode(shift + base);
+        } else {
+          result += c;
+        }
+      }
+
+      document.getElementById("decryptedText").textContent = result;
+    }
+  </script>
+</body>
+</html>
